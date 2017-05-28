@@ -1,0 +1,135 @@
+<Button id="exitButton" class="warningButton" text="Exit" X="$application.X" Y="$application.X" width="$#self.text+2"  horizontalAlign="centre" />
+
+<Button id="openPageSelectorButton" class="informationButton" text="Select page" X="$application.width-self.width+1" Y=1 width="$#self.text+1" horizontalAlign="centre"/>
+
+<PageContainer  Y=2 width="$application.width-1" height="$application.height-1">
+    <Page id="main" xScrollAllowed=false>
+        <Label text="Welcome to tvi016's shipcontroller" X="$(parent.width/2)-(#self.text/2)" Y=2/>
+    </Page>
+    <Page id="shipController" xScrollAllowed=false>
+        <Container width="$parent.width" height="$parent.height-4"> <!--Main comntainer-->
+            <Container width="$parent.width/2" height="$parent.height"> <!-- First column-->
+                <Label X=1 Y=2 text="Ship Dimensions:"/>
+                <Button id="editDimensionButton" class="warningButton" text="Edit" X="$parent.width-self.width" Y=2 width="$#self.text+2" horizontalAlign="centre" />
+
+                <Container X=2 Y=3 width=25  height=3>
+                    <Container width=11 height=3>
+                        <Container width=6 height=3>
+                            <Label Y=1 text="Front:"/>
+                            <Label Y=2 text="Right:"/>
+                            <Label Y=3 text="Up:"/>
+                        </Container>
+                        <Container id="positiveDimensionLabelContainer" X=8 width=4 height=3>
+                            <Label id="frontDimLabel" Y=1 text="" />
+                            <Label id="rightDimLabel" Y=2 text="" />
+                            <Label id="upDimLabel" Y=3 text="" />
+                        </Container>
+                        <Container id="positiveDimensionInputContainer" enabled=false visible=false X=8 width=4 height=3>
+                            <Input id="frontDimInput" X=1 Y=1 width=4 limit=4 />
+                            <Input id="rightDimInput" X=1 Y=2 width=4 limit=4 />
+                            <Input id="upDimInput" X=1 Y=3 width=4 limit=4 />
+                        </Container>
+                    </Container>
+                    <Container X=13 width=10 height=3>
+                        <Container width=5 height=3 >
+                            <Label Y=1 text="Back:"/>
+                            <Label Y=2 text="Left:"/>
+                            <Label Y=3 text="Down:"/>
+                        </Container>
+                        <Container id="negativeDimensionLabelContainer" X=7 width=4 height=3>
+                            <Label id="backDimLabel" Y=1 text="" />
+                            <Label id="leftDimLabel" Y=2 text="" />
+                            <Label id="downDimLabel" Y=3 text="" />
+                        </Container>
+                        <Container id="negativeDimensionInputContainer" enabled=false visible=false X=7 width=4 height=3>
+                            <Input id="backDimInput" Y=1 width=4 limit=4 value="" />
+                            <Input id="leftDimInput" Y=2 width=4 limit=4 value="" />
+                            <Input id="downDimInput" Y=3 width=4 limit=4 value="" />
+                        </Container>
+
+                    </Container>
+                </Container>
+                <Container Y=6 width="$parent.width" height=1>
+                    <Label width=5 text="Size:"/><Label id="shipSizeLabel" X=7 text=""/>
+                </Container>
+                <Label X=1 Y=7 text="Ship Core:"/>
+                <Container X=2 Y=8 width=20 height=3>
+                    <Container width=2 height=3>
+                        <Label Y=1 text="X:"/>
+                        <Label Y=2 text="Y:"/>
+                        <Label Y=3 text="Z:"/>
+                    </Container>
+                    <Container X=4 height=3 width=17>
+                        <Label id="xPosLabel" Y=1 text=""/>
+                        <Label id="yPosLabel" Y=2 text=""/>
+                        <Label id="zPosLabel" Y=3 text=""/>
+                    </Container>
+                </Container>
+            </Container>
+
+            <Container X=26 width="$parent.width/2" height="$parent.height" > <!-- Second columns-->
+                <Label X=1 Y=2 text="Jump information:"/>
+                <Button id="editMovementButton" class="warningButton" text="Edit" X="$parent.width-self.width" Y=2 width="$#self.text+2" horizontalAlign="centre" />
+                <Container X=2 Y=3 width="$parent.width" height=4>
+                    <Container width=6 height=3>
+                        <Label Y=1 text="Front:"/>
+                        <Label Y=2 text="Up:"/>
+                        <Label Y=3 text="Right:"/>
+                    </Container>
+                    <Container id="movementLabelContainer" visible=true X=8 height=3 width=4>
+                        <Label id="frontMovementLabel" Y=1  text=""/>
+                        <Label id="upMovementLabel" Y=2  text=""/>
+                        <Label id="rightMovementLabel" Y=3  text=""/>
+                    </Container>
+                    <Container id="movementInputContainer" enabled=false visible=false X=8 height=3 width=4>
+                        <Input id="frontMovementInput" width=4 Y=1 limit=4 />
+                        <Input id="upMovementInput" width=4 Y=2 limit=4 />
+                        <Input id="rightMovementInput" width=4 Y=3 limit=4 />
+                    </Container>
+                    <Container Y=4 width="$parent.width" height=1>
+                        <Label width=7 text="Rotate:"/><Label id="shipRotationLabel" X=9 text=""/>
+                    </Container>
+
+                </Container>
+                <Container Y=7 width="$parent.width" height=3>
+                    <Label Y=1 width=9  text="Distance:"/><Label id="distanceLabel" X=11 Y=1 text=""/>
+
+                    <Label Y=2 width=16 text="Energy required:"/>
+                        <Label id="energyRequiredLabel" X=2 Y=3 text=""/>
+                </Container>
+                <Label Y=11 text="Settings:"/>
+                <ScrollContainer X=2 Y=12 width="$parent.width" height=3>
+                    <Checkbox id="enableHyperspaceCheckbox" value="enable"/> <Label id="enableHyperspaceLabel" labelFor="enableHyperspaceCheckbox" text="" X=3 />
+                </ScrollContainer>
+            </Container>
+        </Container>
+        <Button id="jumpButton" class="warningButton" text="Jump" X="$(parent.width/2)-(self.width/2)" Y="$parent.height-2" width="$#self.text+2" horizontalAlign="centre"/>
+        <Label text="Energy:" X=2 Y="$parent.height-1"/>
+        <ProgressBar id="energyProgressBar" backgroundColor="black" X=2 Y="$parent.height" width="$parent.width-2" text="0%"/>
+
+        <!-- <Button text="Summon all" id="summonAllButton" X="$(parent.width/2)-(self.width/2)" Y="$parent.height" width="$#self.text+2" horizontalAlign="centre"/> -->
+    </Page>
+    <Page id="forceFieldController" xScrollAllowed=false>
+
+    </Page>
+    <Page id="cloakingController" xScrollAllowed=false>
+
+    </Page>
+</PageContainer>
+
+<Container id="pageSelectorPane" width=28 height="$parent.height-1" Y=2  X="-50">
+    <Label X="$(parent.width/2)-(#self.text/2)" Y=2 text="Select page" />
+    <ScrollContainer X=1 Y=4 width="$parent.width" height="$parent.height">
+        <Label text="Main menu" id="mainLabel" labelFor="mainButton" Y=1 />
+        <RadioButton id="mainButton" value="main" group="pageSelector" Y=1  class="pageSelector"/>
+
+        <Label text="Ship controller" id="shipControllerLabel" labelFor="shipControllerButton" Y=3/>
+        <RadioButton id="shipControllerButton" value="shipController" group="pageSelector" Y=3  class="pageSelector"/>
+
+        <Label text="Forcefield Controller" id="forceFieldControllerLabel" labelFor="forceFieldControllerButton" Y=5/>
+        <RadioButton id="forceFieldControllerButton" value="forceFieldController" group="pageSelector" Y=5  class="pageSelector"/>
+
+        <Label text="Cloaking controller" id="cloakingControllerLabel" labelFor="cloakingControllerButton" Y=7/>
+        <RadioButton id="cloakingControllerButton" value="cloakingController" group="pageSelector" Y=7  class="pageSelector"/>
+    </ScrollContainer>
+</Container>

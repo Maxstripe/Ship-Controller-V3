@@ -1,0 +1,43 @@
+<activeBackgroundColor>cyan</activeBackgroundColor>
+<activeColor>white</activeColor>
+
+<Button class="warningButton">
+    <backgroundColour>red</backgroundColour>
+    <activeBackgroundColour>red</activeBackgroundColour>
+</Button>
+
+<Button class="informationButton">
+    <backgroundColour>yellow</backgroundColour>
+    <activeBackgroundColour>yellow</activeBackgroundColour>
+</Button>
+
+<PageContainer>
+    <Input>
+        <backgroundColor>256</backgroundColor>
+        <color>black</color>
+    </Input>
+    <Checkbox>
+        <backgroundColor>256</backgroundColor>
+        <toggledBackgroundColour>256</toggledBackgroundColour>
+    </Checkbox>
+</PageContainer>
+
+<Container id="pageSelectorPane">
+    <backgroundColour>128</backgroundColour>
+    <Label>
+        <colour>256</colour>
+    </Label>
+    <ScrollContainer>
+        <RadioButton>
+            <backgroundColour>cyan</backgroundColour>
+            <toggledBackgroundColour>lightGrey</toggledBackgroundColour>
+            <activeBackgroundColour>lightBlue</activeBackgroundColour>
+            <toggledColour>white</toggledColour>
+            <X dynamic>parent.width-1</X>
+        </RadioButton>
+        <Label>
+            <colour>256</colour>
+            <X>2</X>
+        </Label>
+    </ScrollContainer>
+</Container>

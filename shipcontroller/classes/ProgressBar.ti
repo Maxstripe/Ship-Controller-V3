@@ -1,0 +1,49 @@
+class ProgressBar extends Node mixin MTextDisplay {
+    maxValue = 1;
+    value = 0;
+}
+
+function ProgressBar:__init__(...)
+    self:resolve(...)
+    self:super()
+
+
+    self:register("width","value","maxValue")
+
+    -- horizontalAlign = "right";
+end
+
+function ProgressBar:draw(force)
+    if self.changed or force then
+        local backgroundColor = self.backgroundColor
+
+        local color = self.color
+
+        local x = self.X
+        local y = self.Y
+        local width = self.width
+
+        local value = self.value
+        local maxValue = self.maxValue
+
+        self.canvas:clear(backgroundColor)
+
+        -- self.horizontalAlign = "center"
+
+
+
+        self.canvas:drawBox(1,1,math.ceil((width/maxValue) * value),2,32)
+
+        for i=1, #self.text do
+            local offset = math.floor((self.width/2)-(#self.text/2))
+            local char = self.text:sub(i,i)
+
+            if offset+i > math.floor((width/maxValue) * value) then
+                self.canvas:drawPoint(offset+i,1,char,1,backgroundColor)
+            else
+                self.canvas:drawPoint(offset+i,1,char,1, 32)
+            end
+        end
+        self.changed = false
+    end
+end
