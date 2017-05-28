@@ -28,6 +28,7 @@ local editDimensionEnabled
 
 ---------- Function that gets run alongside the program, and handles peripherals and updating GUI when peripherals get changed
 function updatePeripherals()
+    ---------- Function for wrapping new peripherals
     local function addPeripheral(side)
         local type = peripheral.getType(side)
         if not (peripherals[type]) then
@@ -35,6 +36,7 @@ function updatePeripherals()
         end
         peripherals[type][side]=peripheral.wrap(side)
     end
+    ---------- Function for removing peipherals from table
     local function removePeripheral(side)
         for k,v in pairs(peripherals) do
             if v[side] then
@@ -48,14 +50,16 @@ function updatePeripherals()
     end
 
     peripherals = {}
+    ---------- Add initial peripherals
     for k,side in pairs(peripheral.getNames()) do
         addPeripheral(side)
     end
+    ---------- Filter initial peripherals
     filterPeripherals()
+    ---------- Continously check for peripherals placed or removed
     while true do
         local event, side = os.pullEvent()
-        if event == "cooldown_done" then
-        elseif event == "peripheral" then
+        if event == "peripheral" then
             addPeripheral(side)
             filterPeripherals()
         elseif event == "peripheral_detach" then
@@ -99,6 +103,7 @@ function filterPeripherals()
 end
 ---------- updateDisplay changes GUI after peripheral has been removed or added, and should only be run once after changed peripherals
 function updateDisplay()
+    ---------- Enable or disable radio buttons in page selector if the required peripheral is placed
     for k,v in pairs(filteredPeripherals) do
         if not v then
             application:query("#"..k.."Button").result[1].enabled = false
@@ -109,9 +114,10 @@ function updateDisplay()
         end
     end
 
+
     local shipController = filteredPeripherals.shipController
-    local cloakingCore = filteredPeripherals.cloakingController
-    local forceFieldProjector = filteredPeripherals.forceFieldController
+    local cloakingController = filteredPeripherals.cloakingController
+    local forceFieldController = filteredPeripherals.forceFieldController
 
     if shipController then
         if shipController.isAttached() then
@@ -315,18 +321,18 @@ function updateDisplay()
 
         end
     end
-    if cloakingCore then
+    if cloakingController then
 
     end
-    if forceFieldProjector then
+    if forceFieldController then
 
     end
 end
 
 function refreshDisplay()
     local shipController = filteredPeripherals.shipController
-    local cloakingCore = filteredPeripherals.cloakingCore
-    local forceFieldProjector = filteredPeripherals.forceFieldProjector
+    local cloakingController = filteredPeripherals.cloakingController
+    local forceFieldController = filteredPeripherals.forceFieldController
     if shipController then
         if shipController.isAttached() then
 
@@ -418,10 +424,10 @@ function refreshDisplay()
             downDimInput:queueAreaReset()
         end
     end
-    if cloakingCore then
+    if cloakingController then
 
     end
-    if forceFieldProjector then
+    if forceFieldController then
 
     end
 end

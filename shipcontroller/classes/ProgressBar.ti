@@ -1,3 +1,5 @@
+--This is just something i botched together
+
 class ProgressBar extends Node mixin MTextDisplay {
     maxValue = 1;
     value = 0;
