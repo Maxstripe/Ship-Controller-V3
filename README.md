@@ -2,7 +2,7 @@
 The file _shipcontrollerBuild_ is a package which includes all files inside, including the whole Titanium GUI framework. 
 
 ## Downloading
-Download _shipControllerBuild_ directly or use pastebin: pastebin get [35HbwhNU](https://pastebin.com/35HbwhNU) startup
+Download _shipControllerBuild_ directly or use pastebin: pastebin get [bpJfJMsY](https://pastebin.com/bpJfJMsY) startup
 
 ## Current features:
 * Automatic peripheral updating
