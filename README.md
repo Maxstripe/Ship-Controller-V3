@@ -6,6 +6,7 @@ Download _shipControllerBuild_ directly or use pastebin: pastebin get [35HbwhNU]
 
 ## Current features:
 * Automatic peripheral updating
+  * Able to change any peripheral without restarting
 * Ship Controller
   * Automatically updates all content on screen
   * Edit ship dimensions
@@ -15,6 +16,8 @@ Download _shipControllerBuild_ directly or use pastebin: pastebin get [35HbwhNU]
   * Shows distance and energy required for jump
   * Toggle for hyperspace
   * Energy bar
+  * Start ship jump
+    * Remembers which page you were on before jump, and opens it next time you boot
 ## Features not implemented
 * Ship Controller
   * Change name
