@@ -4,16 +4,31 @@ if (not term.isColor()) and termW ~= 51 and termH ~= 19 then
   error("Advanced computer required")
 end
 
----------- Initialize GUI framework
--- dofile "shipcontroller/titanium.lua"
+term.setTextColor(colors.cyan)
+
+local tasks = {
+    "Launching application",
+    "Importing Theme",
+    "Applying Theme",
+    "Loading TML",
+    "Registering callbacks for navigation",
+    "Checking if any config files is available",
+    "Starting peripheral updater",
+    "Starting application"
+}
+local currentTask = 1
+function nextTask()
+    print(tasks[currentTask])
+    currentTask = currentTask + 1
+end
 
 ---------- Set up GUI framework
+nextTask()
 local application = Application(1,1,termW,termH):set{
     terminatable = true,
     backgroundColour = colours.white,
     colour = colours.grey,
 }
-----------
 function stopApplication()
     application:stop()
     term.clear()
@@ -57,6 +72,7 @@ function updatePeripherals()
     ---------- Filter initial peripherals
     filterPeripherals()
     ---------- Continously check for peripherals placed or removed
+
     while true do
         local event, side = os.pullEvent()
         if event == "peripheral" then
@@ -121,7 +137,7 @@ function updateDisplay()
 
     if shipController then
         if shipController.isAttached() then
-            -- application:on("shipCoreCooldownDone",stopApplication)
+            -- application:on("shipCoreCooldownDone",function() end)
 
             local function rotateShip(dir)
                 if(not tonumber(dir)) then
@@ -136,6 +152,7 @@ function updateDisplay()
                 end
             end
             shipController.mode(1)
+            shipController.rotationSteps(0)
             local editDimensionButton = application:query("#editDimensionButton").result[1]
 
             local positiveDimensionLabelContainer = application:query("#positiveDimensionLabelContainer").result[1]
@@ -240,8 +257,8 @@ function updateDisplay()
                     movementLabelContainer:setVisible(false)
                     movementInputContainer:setVisible(true)
                     movementInputContainer:setEnabled(true)
-                    rotateButtonContainer:setVisible(true)
-                    rotateButtonContainer:setEnabled(true)
+                    -- rotateButtonContainer:setVisible(true)
+                    -- rotateButtonContainer:setEnabled(true)
                     frontMovementInput:focus()
                 else
                     shipController.movement(
@@ -255,8 +272,8 @@ function updateDisplay()
                     movementLabelContainer:setVisible(true)
                     movementInputContainer:setVisible(false)
                     movementInputContainer:setEnabled(false)
-                    rotateButtonContainer:setVisible(false)
-                    rotateButtonContainer:setEnabled(false)
+                    -- rotateButtonContainer:setVisible(false)
+                    -- rotateButtonContainer:setEnabled(false)
 
                     refreshDisplay()
                 end
@@ -391,6 +408,10 @@ function refreshDisplay()
 
             local shipRotationLabel = application:query("#shipRotationLabel").result[1]
 
+            -- local rotateButtonContainer = application:query("#rotateButtonContainer").result[1]
+            --     local rotateLeftButton = application:query("#rotateLeftButton").result[1]
+            --     local rotateRightButton =  application:query("#rotateRightButton").result[1]
+
             local distanceLabel = application:query("#distanceLabel").result[1]
             local energyRequiredLabel = application:query("#energyRequiredLabel").result[1]
 
@@ -463,15 +484,18 @@ end
 
 ---------- Set up markup, theme and app variables
 app = {}
+nextTask()
 app.masterTheme = Theme.fromFile("masterTheme","shipcontroller/ui/master.theme")
-
+nextTask()
 application:addTheme(app.masterTheme)
+nextTask()
 application:importFromTML("shipcontroller/ui/master.tml")
 
 app.pages = application:query("PageContainer").result[1]
 app.pageSelectorPane = application:query("Container#pageSelectorPane").result[1]
 
 ---------- Set animation and function for side pane
+nextTask()
 local sidePane,paneStatus = app.pageSelectorPane
 function paneToggle()
     paneStatus = not paneStatus
@@ -492,6 +516,7 @@ application:query("#openPageSelectorButton"):on("trigger",paneToggle)
 application:registerHotkey("close","leftCtrl-leftShift-t",stopApplication)
 
 ---------- Select main page on startup, also opens the page selector which is a happy mistake.
+nextTask()
 if(fs.exists("shipControllerStartup.cfg")) then
     local h = fs.open("shipControllerStartup.cfg","r")
     local cfg = textutils.unserialize(h.readAll())
@@ -507,14 +532,18 @@ end
 
 ---------- Add threads, can be set with a timeout to reduce lag
 -- application:schedule(function()
-    application:addThread(Thread(updatePeripherals, false))
-    application:addThread(Thread(function()
-        while true do
-            refreshDisplay()
-            sleep(2)
-        end
-    end, false))
+nextTask()
+application:addThread(Thread(updatePeripherals, false))
+application:addThread(Thread(function()
+    while true do
+        refreshDisplay()
+        sleep(2)
+    end
+end, false))
+
 -- end, 1,false)
 
 ---------- Start Titanium GUI
+nextTask()
+
 application:start()

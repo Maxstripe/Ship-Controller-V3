@@ -88,12 +88,12 @@
                     </Container>
                     <Container Y=4 width="$parent.width" height=1>
                         <Label width=7 text="Rotate:"/><Label id="shipRotationLabel" X=9 text=""/>
+                        <Container  id="rotateButtonContainer"  enabled=true visible=true width=7 X="$parent.width-self.width-1" Y=1>
+                            <Button id="rotateLeftButton" class="informationButton" X=1 width=3 text=" < "/> <Button id="rotateRightButton" class="informationButton" X=5 width=3 text=" > "/>
+                        </Container>
                     </Container>
-                    <Container  id="rotateButtonContainer" enabled=false visible=false backgroundColor="green" width=7 X="$parent.width-self.width-1" Y=4>
-                        <Button id="rotateLeftButton" X=1 width=3 text=" < "/> <Button id="rotateRightButton" X=5 width=3 text=" > "/>
-                    </Container>
-
                 </Container>
+
                 <Container Y=7 width="$parent.width" height=3>
                     <Label Y=1 width=9  text="Distance:"/><Label id="distanceLabel" X=11 Y=1 text=""/>
 
