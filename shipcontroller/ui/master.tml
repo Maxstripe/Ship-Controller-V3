@@ -7,12 +7,14 @@
         <Label text="Welcome to tvi016's shipcontroller" X="$(parent.width/2)-(#self.text/2)" Y=2/>
     </Page>
     <Page id="shipController" xScrollAllowed=false>
-        <Container width="$parent.width" height="$parent.height-4"> <!--Main comntainer-->
-            <Container width="$parent.width/2" height="$parent.height"> <!-- First column-->
-                <Label X=1 Y=2 text="Ship Dimensions:"/>
+        <Label text="Ship Controller" Y=1 X="$(parent.width/2)-(#self.text/2)" />
+
+        <Container Y=3 width=50 height="$parent.height-4"> <!--Main comntainer-->
+            <Container width=25 height="$parent.height"> <!-- First column-->
+                <Label X=1 Y=1 text="Ship Dimensions:"/>
                 <Button id="editDimensionButton" class="warningButton" text="Edit" X="$parent.width-self.width" Y=2 width="$#self.text+2" horizontalAlign="centre" />
 
-                <Container X=2 Y=3 width=25  height=3>
+                <Container X=2 Y=2 width=25  height=3>
                     <Container width=11 height=3>
                         <Container width=6 height=3>
                             <Label Y=1 text="Front:"/>
@@ -49,10 +51,10 @@
 
                     </Container>
                 </Container>
-                <Container Y=6 width="$parent.width" height=1>
+                <Container Y=5 width="$parent.width" height=1>
                     <Label width=5 text="Size:"/><Label id="shipSizeLabel" X=7 text=""/>
                 </Container>
-                <Label X=1 Y=7 text="Ship Core:"/>
+                <Label X=1 Y=6 text="Ship Core:"/>
                 <Container X=2 Y=8 width=20 height=3>
                     <Container width=2 height=3>
                         <Label Y=1 text="X:"/>
@@ -68,9 +70,9 @@
             </Container>
 
             <Container X=26 width="$parent.width/2" height="$parent.height" > <!-- Second columns-->
-                <Label X=1 Y=2 text="Jump information:"/>
+                <Label X=1 Y=1 text="Jump information:"/>
                 <Button id="editMovementButton" class="warningButton" text="Edit" X="$parent.width-self.width" Y=2 width="$#self.text+2" horizontalAlign="centre" />
-                <Container X=2 Y=3 width="$parent.width" height=4>
+                <Container X=2 Y=2 width="$parent.width" height=4>
                     <Container width=6 height=3>
                         <Label Y=1 text="Front:"/>
                         <Label Y=2 text="Up:"/>
@@ -94,29 +96,46 @@
                     </Container>
                 </Container>
 
-                <Container Y=7 width="$parent.width" height=3>
+                <Container Y=6 width="$parent.width" height=3>
                     <Label Y=1 width=9  text="Distance:"/><Label id="distanceLabel" X=11 Y=1 text=""/>
 
                     <Label Y=2 width=16 text="Energy required:"/>
                         <Label id="energyRequiredLabel" X=2 Y=3 text=""/>
                 </Container>
-                <Label Y=11 text="Settings:"/>
-                <ScrollContainer X=2 Y=12 width="$parent.width" height=3>
+                <Label Y=10 text="Settings:"/>
+                <ScrollContainer X=2 Y=11 width="$parent.width" height=3>
                     <Checkbox id="enableHyperspaceCheckbox" value="enable"/> <Label id="enableHyperspaceLabel" labelFor="enableHyperspaceCheckbox" text="" X=3 />
                 </ScrollContainer>
             </Container>
         </Container>
         <Button id="jumpButton" class="warningButton" text="Jump" X="$(parent.width/2)-(self.width/2)" Y="$parent.height-2" width="$#self.text+2" horizontalAlign="centre"/>
         <Label text="Energy:" X=2 Y="$parent.height-1"/>
-        <ProgressBar id="energyProgressBar" backgroundColor="black" X=2 Y="$parent.height" width="$parent.width-2" text="0%"/>
+        <ProgressBar id="shipEnergyProgressBar" backgroundColor="black" X=2 Y="$parent.height" width="$parent.width-2" text="0%"/>
 
         <!-- <Button text="Summon all" id="summonAllButton" X="$(parent.width/2)-(self.width/2)" Y="$parent.height" width="$#self.text+2" horizontalAlign="centre"/> -->
     </Page>
     <Page id="forceFieldController" xScrollAllowed=false>
-
+        <Label text="Forcefield Controller" Y=1 X="$(parent.width/2)-(#self.text/2)" />
     </Page>
     <Page id="cloakingController" xScrollAllowed=false>
+        <Label text="Cloaking Controller" Y=1 X="$(parent.width/2)-(#self.text/2)" />
+        <Container width=50 Y=2 height="$parent.height-3"> <!-- Main container -->
+            <Container Y=1 width=25 height="$parent.height"> <!-- First column -->
+                <Container X=2 Y=2 width="$parent.width" height=3>
+                    <RadioButton X=9 value=1 id="tier1Button" class="tierRadioButton" group="tierRadioButton"/>
+                    <Label X=1 text="Tier 1:" labelFor="tier1Button"/>
+                    <RadioButton X=9 Y=3 value=2 id="tier2Button" class="tierRadioButton" group="tierRadioButton"/>
+                    <Label X=1 Y=3 text="Tier 2:" labelFor="tier2Button"/>
+                </Container>
+            </Container>
+            <Container X=26 Y=1 width=25 height="$parent.height"> <!-- Second column -->
+                <Button id="activateCloakingButton" class="warningButton" X="$parent.width-self.width-1" width="$#self.text-1" height=3 Y=2  text="\n Activate " />
+            </Container>
+        </Container>
 
+        <Label id="isAssemblyValidLabel" class="warningLabel" visible=false text="Warning! Cloaking core assembly is not valid!" X="$(parent.width/2)-(#self.text/2)" Y=10/>
+        <Label text="Energy:" X=2 Y="$parent.height-1"/>
+        <ProgressBar id="cloakingCoreEnergyProgressBar" backgroundColor="black" X=2 Y="$parent.height" width="$parent.width-2" text="0%"/>
     </Page>
 </PageContainer>
 

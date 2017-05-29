@@ -1,6 +1,8 @@
 <activeBackgroundColor>cyan</activeBackgroundColor>
 <activeColor>white</activeColor>
-
+<Label class="warningLabel">
+    <color>red</color>
+</Label>
 <Button class="warningButton">
     <backgroundColour>red</backgroundColour>
     <activeBackgroundColour>red</activeBackgroundColour>
@@ -11,7 +13,14 @@
     <activeBackgroundColour>yellow</activeBackgroundColour>
 </Button>
 
+
 <PageContainer>
+    <RadioButton>
+        <backgroundColour>cyan</backgroundColour>
+        <toggledBackgroundColour>lightGrey</toggledBackgroundColour>
+        <activeBackgroundColour>lightBlue</activeBackgroundColour>
+        <toggledColour>white</toggledColour>
+    </RadioButton>
     <Input>
         <backgroundColor>256</backgroundColor>
         <color>black</color>

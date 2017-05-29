@@ -1,4 +1,4 @@
-local termW, termH = term.getSize();
+local termW, termH = term.getSize()
 ---------- Check if on advanced computer
 if (not term.isColor()) and termW ~= 51 and termH ~= 19 then
   error("Advanced computer required")
@@ -122,11 +122,13 @@ function updateDisplay()
     ---------- Enable or disable radio buttons in page selector if the required peripheral is placed
     for k,v in pairs(filteredPeripherals) do
         if not v then
-            application:query("#"..k.."Button").result[1].enabled = false
-            application:query("#"..k.."Label").result[1].enabled = false
+            application:query("#"..k.."Button").result[1]:setEnabled(false)
+            application:query("#"..k.."Label").result[1]:setEnabled(false)
+            application:query("#"..k).result[1]:setEnabled(false)
         else
-            application:query("#"..k.."Button").result[1].enabled = true
-            application:query("#"..k.."Label").result[1].enabled = true
+            application:query("#"..k.."Button").result[1]:setEnabled(true)
+            application:query("#"..k.."Label").result[1]:setEnabled(true)
+            application:query("#"..k).result[1]:setEnabled(true)
         end
     end
 
@@ -366,14 +368,33 @@ function updateDisplay()
 
         end
     end
-    if cloakingController then
-
-    end
     if forceFieldController then
 
     end
+    if cloakingController then
+        local activateCloakingButton = application:query("#activateCloakingButton").result[1]
+
+        local tierRadioButton = application:query(".tierRadioButton")
+        local currentTier = cloakingController.tier()
+
+        function toggleCloakingEnabled()
+            cloakingController.enable(not cloakingController.enable())
+            refreshDisplay()
+        end
+        application:query("#tier"..currentTier.."Button").result[1]:select()
+
+        tierRadioButton:off("select")
+        tierRadioButton:on("select",function(radioButton)
+            cloakingController.tier(radioButton.value)
+        end)
+        activateCloakingButton:off("trigger")
+        activateCloakingButton:on("trigger", toggleCloakingEnabled)
+    end
 end
 
+---------- Refreshes everything on the screen that needs to be updated regularily
+local prevShipControllerEnergy = 0
+local prevCloakingCoreEnergy = 0
 function refreshDisplay()
     local shipController = filteredPeripherals.shipController
     local cloakingController = filteredPeripherals.cloakingController
@@ -401,7 +422,6 @@ function refreshDisplay()
 
             local shipSizeLabel = application:query("#shipSizeLabel").result[1]
 
-
             local frontMovementLabel = application:query("#frontMovementLabel").result[1]
             local upMovementLabel = application:query("#upMovementLabel").result[1]
             local rightMovementLabel = application:query("#rightMovementLabel").result[1]
@@ -415,7 +435,7 @@ function refreshDisplay()
             local distanceLabel = application:query("#distanceLabel").result[1]
             local energyRequiredLabel = application:query("#energyRequiredLabel").result[1]
 
-            local energyProgressBar = application:query("#energyProgressBar").result[1]
+            local shipEnergyProgressBar = application:query("#shipEnergyProgressBar").result[1]
 
             local xPos,yPos,zPos = shipController.position()
             local frontDim, rightDim, upDim = shipController.dim_positive()
@@ -439,9 +459,7 @@ function refreshDisplay()
 
             -- local summonAllButton = application:query("#summonAllButton")
 
-            energyProgressBar:set("maxValue",maxEnergy)
-            energyProgressBar:set("value", curEnergy)
-            energyProgressBar:setText(math.ceil((curEnergy/maxEnergy*100)).."%")
+
 
             xPosLabel:setText(tostring(xPos))
             yPosLabel:setText(tostring(yPos))
@@ -465,6 +483,11 @@ function refreshDisplay()
             distanceLabel:setText(actualDistance.." blocks")
             energyRequiredLabel:setText(energyRequired.." EU")
 
+            shipEnergyProgressBar:set("maxValue",maxEnergy)
+            shipEnergyProgressBar:set("value", curEnergy)
+            shipEnergyProgressBar:setText(math.ceil((curEnergy/maxEnergy*100)).."%".." : ".. (((curEnergy-prevShipControllerEnergy)>=0) and "+" or "") ..(curEnergy-prevShipControllerEnergy) .."EU")
+            prevShipControllerEnergy = curEnergy
+
             frontDimInput:queueAreaReset()
             rightDimInput:queueAreaReset()
             upDimInput:queueAreaReset()
@@ -473,14 +496,35 @@ function refreshDisplay()
             downDimInput:queueAreaReset()
         end
     end
-    if cloakingController then
-
-    end
     if forceFieldController then
 
     end
-end
+    if cloakingController then
+        local isAssemblyValidLabel = application:query("#isAssemblyValidLabel").result[1]
+        local activateCloakingButton = application:query("#activateCloakingButton").result[1]
+        local cloakingCoreEnergyProgressBar = application:query("#cloakingCoreEnergyProgressBar").result[1]
 
+        local isEnabled = cloakingController.enable()
+        local curEnergy,maxEnergy = cloakingController.energy()
+
+
+        activateCloakingButton:setText("\n ".. (isEnabled and "Disable " or "Activate "))
+
+        cloakingCoreEnergyProgressBar:set("maxValue",maxEnergy)
+        cloakingCoreEnergyProgressBar:set("value", curEnergy)
+        -- cloakingCoreEnergyProgressBar:setText(math.ceil((curEnergy/maxEnergy*100)).."%")
+        cloakingCoreEnergyProgressBar:setText(math.ceil((curEnergy/maxEnergy*100)).."%".." : ".. (((curEnergy-prevCloakingCoreEnergy)>=0) and "+" or "") ..(curEnergy-prevCloakingCoreEnergy) .."EU")
+        prevCloakingCoreEnergy = curEnergy
+
+        if(cloakingController.isAssemblyValid()) then
+            isAssemblyValidLabel:setVisible(false)
+            activateCloakingButton:setEnabled(true)
+        else
+            isAssemblyValidLabel:setVisible(true)
+            activateCloakingButton:setEnabled(false)
+        end
+    end
+end
 
 ---------- Set up markup, theme and app variables
 app = {}
@@ -521,7 +565,7 @@ if(fs.exists("shipControllerStartup.cfg")) then
     local h = fs.open("shipControllerStartup.cfg","r")
     local cfg = textutils.unserialize(h.readAll())
     if cfg.pageID then
-        application:query("#"..cfg.pageID.."Button"):executeOnNodes("select")
+        application:query("#"..cfg.pageID.."Button").result[1]:select()
         paneToggle()
     end
     h.close()
@@ -537,7 +581,7 @@ application:addThread(Thread(updatePeripherals, false))
 application:addThread(Thread(function()
     while true do
         refreshDisplay()
-        sleep(2)
+        sleep(1.5)
     end
 end, false))
 
