@@ -34,6 +34,6 @@ Download _shipControllerBuild_ directly or use pastebin: __pastebin get [bpJfJMs
   * Switch tiers
   * Show information
 
-!["Ship Controller V3"](http://i.imgur.com/obf6UOA.png "Ship Controller V3")
+!["Ship Controller V3"](http://i.imgur.com/Q39GAEu.png "Ship Controller V3")
 
 !["Ship Controller V3](https://zippy.gfycat.com/HideousKlutzyDaddylonglegs.gif "Ship Controller V3")
