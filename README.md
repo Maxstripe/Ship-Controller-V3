@@ -15,9 +15,13 @@ Download _shipControllerBuild_ directly or use pastebin: __pastebin get [bpJfJMs
   * Edit jump information (Rotation and movement)
   * Shows distance and energy required for jump
   * Toggle for hyperspace
-  * Energy bar
+  * Show energy (Gain and percentage)
   * Start ship jump
     * Remembers which page you were on before jump, and opens it next time you boot
+* Cloaking core
+  * Turn on and off
+  * Switch tiers
+  * Show energy (Gain and percentage)
 ## Features not implemented
 * Ship Controller
   * Change name
@@ -29,10 +33,7 @@ Download _shipControllerBuild_ directly or use pastebin: __pastebin get [bpJfJMs
   * Show individual information about projectors (Energy)
   * Show sum of all information on main screen (Energy)
   * Possibly implement remote control???
-* Cloaking core
-  * Turn on and off
-  * Switch tiers
-  * Show information
+
 
 !["Ship Controller V3"](http://i.imgur.com/Q39GAEu.png "Ship Controller V3")
 
