@@ -121,6 +121,20 @@ function updateDisplay()
 
     if shipController then
         if shipController.isAttached() then
+            -- application:on("shipCoreCooldownDone",stopApplication)
+
+            local function rotateShip(dir)
+                if(not tonumber(dir)) then
+                    return
+                end
+                if(shipController.rotationSteps() + dir > 3) then
+                    shipController.rotationSteps(0)
+                elseif(shipController.rotationSteps() + dir < 0) then
+                    shipController.rotationSteps(3)
+                else
+                    shipController.rotationSteps(shipController.rotationSteps()+dir)
+                end
+            end
             shipController.mode(1)
             local editDimensionButton = application:query("#editDimensionButton").result[1]
 
@@ -155,6 +169,11 @@ function updateDisplay()
             local frontMovementInput = application:query("#frontMovementInput").result[1]
             local upMovementInput = application:query("#upMovementInput").result[1]
             local rightMovementInput = application:query("#rightMovementInput").result[1]
+
+            local rotateButtonContainer = application:query("#rotateButtonContainer").result[1]
+
+            local rotateLeftButton = application:query("#rotateLeftButton").result[1]
+            local rotateRightButton =  application:query("#rotateRightButton").result[1]
 
             local enableHyperspaceCheckbox = application:query("#enableHyperspaceCheckbox").result[1]
             local enableHyperspaceLabel = application:query("#enableHyperspaceLabel").result[1]
@@ -221,6 +240,8 @@ function updateDisplay()
                     movementLabelContainer:setVisible(false)
                     movementInputContainer:setVisible(true)
                     movementInputContainer:setEnabled(true)
+                    rotateButtonContainer:setVisible(true)
+                    rotateButtonContainer:setEnabled(true)
                     frontMovementInput:focus()
                 else
                     shipController.movement(
@@ -234,6 +255,8 @@ function updateDisplay()
                     movementLabelContainer:setVisible(true)
                     movementInputContainer:setVisible(false)
                     movementInputContainer:setEnabled(false)
+                    rotateButtonContainer:setVisible(false)
+                    rotateButtonContainer:setEnabled(false)
 
                     refreshDisplay()
                 end
@@ -292,6 +315,11 @@ function updateDisplay()
                 input:unfocus()
                 toggleMovementEdit()
             end)
+            rotateLeftButton:off("trigger")
+            rotateLeftButton:on("trigger", function() rotateShip(-1) refreshDisplay() end)
+
+            rotateRightButton:off("trigger")
+            rotateRightButton:on("trigger", function() rotateShip(1) refreshDisplay() end)
 
             if(shipController.isInSpace()) then
                 enableHyperspaceLabel:setText("Warp to hyperspace?")

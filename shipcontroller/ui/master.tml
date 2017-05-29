@@ -89,6 +89,9 @@
                     <Container Y=4 width="$parent.width" height=1>
                         <Label width=7 text="Rotate:"/><Label id="shipRotationLabel" X=9 text=""/>
                     </Container>
+                    <Container  id="rotateButtonContainer" enabled=false visible=false backgroundColor="green" width=7 X="$parent.width-self.width-1" Y=4>
+                        <Button id="rotateLeftButton" X=1 width=3 text=" < "/> <Button id="rotateRightButton" X=5 width=3 text=" > "/>
+                    </Container>
 
                 </Container>
                 <Container Y=7 width="$parent.width" height=3>
