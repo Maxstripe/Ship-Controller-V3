@@ -7,30 +7,29 @@ Download _shipControllerBuild_ directly or use pastebin: pastebin get [35HbwhNU]
 ## Current features:
 * Automatic peripheral updating
 * Ship Controller
-  * Automatically updates all content on screen
+  * Automatically updates all content on screen
   * Edit ship dimensions
   * Shows ship size in blocks
   * Show ship position (XYZ coordinates)
-  * Edit jump information (Rotation and movement)
-  * Shows distance and energy required for jump
+  * Edit jump information (Rotation and movement)
+  * Shows distance and energy required for jump
   * Toggle for hyperspace
-  * Energy bar
-*
+  * Energy bar
 ## Features not implemented
 * Ship Controller
-  * Change name
+  * Change name
 * Forcefield Projector
-  * Multiple forcefields at once
-  * Rename forcefield projector and save names on computer storage
-  * Turn on and off indicidual forcefields
-  * Master switch to turn all forcefields on or off
-  * Show individual information about projectors (Energy)
-  * Show sum of all information on main screen (Energy)
-  * Possibly implement remote control???
+  * Multiple forcefields at once
+  * Rename forcefield projector and save names on computer storage
+  * Turn on and off indicidual forcefields
+  * Master switch to turn all forcefields on or off
+  * Show individual information about projectors (Energy)
+  * Show sum of all information on main screen (Energy)
+  * Possibly implement remote control???
 * Cloaking core
-  * Turn on and off
-  * Switch tiers
-  * Show information
+  * Turn on and off
+  * Switch tiers
+  * Show information
 
 !["Ship Controller V3"](http://i.imgur.com/Fl5ctHj.png "Ship Controller V3")
 
