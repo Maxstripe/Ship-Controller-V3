@@ -11,8 +11,7 @@ Download _shipControllerBuild_ directly or use pastebin: pastebin get [35HbwhNU]
   * Edit ship dimensions
   * Shows ship size in blocks
   * Show ship position (XYZ coordinates)
-  * Edit jump information
-      * Rotate and movement
+  * Edit jump information (Rotation and movement)
   * Shows distance and energy required for jump
   * Toggle for hyperspace
   * Energy bar
@@ -22,7 +21,7 @@ Download _shipControllerBuild_ directly or use pastebin: pastebin get [35HbwhNU]
   * Change name
 * Forcefield Projector
   * Multiple forcefields at once
-    * Rename forcefield projector and save names on computer storage
+  * Rename forcefield projector and save names on computer storage
   * Turn on and off indicidual forcefields
   * Master switch to turn all forcefields on or off
   * Show individual information about projectors (Energy)
