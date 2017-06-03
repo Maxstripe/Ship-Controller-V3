@@ -22,15 +22,16 @@ Download _shipControllerBuild_ directly or use pastebin: __pastebin get [bpJfJMs
   * Turn on and off
   * Switch tiers
   * Show energy (Gain and percentage)
+* Forcefield Projector
+  * Multiple forcefields at once
+  * Turn on and off indicidual forcefields
+  * Show individual information about projectors (Energy)
 ## Features not implemented
 * Ship Controller
   * Change name
 * Forcefield Projector
-  * Multiple forcefields at once
   * Rename forcefield projector and save names on computer storage
-  * Turn on and off indicidual forcefields
   * Master switch to turn all forcefields on or off
-  * Show individual information about projectors (Energy)
   * Show sum of all information on main screen (Energy)
   * Possibly implement remote control???
 
