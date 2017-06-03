@@ -29,10 +29,18 @@ local application = Application(1,1,termW,termH):set{
     backgroundColour = colours.white,
     colour = colours.grey,
 }
-function stopApplication()
+function stopApplication(text)
+    local h = fs.open("shipControllerStartup.cfg","w")
+    h.write(textutils.serialize({
+        pageID = app.pages.selectedPage.id
+    }))
+    h.close()
     application:stop()
     term.clear()
     print("Stopping application...")
+    if(text) then
+        -- print(text)
+    end
 end
 
 ---------- Initialize some variables
@@ -40,6 +48,7 @@ local peripherals = {}
 local filteredPeripherals = {}
 local editMovementEnabled
 local editDimensionEnabled
+local selectedForceField
 
 ---------- Function that gets run alongside the program, and handles peripherals and updating GUI when peripherals get changed
 function updatePeripherals()
@@ -98,21 +107,23 @@ function filterPeripherals()
 
     ---------- Forcefield projector peripheral, not implemented
 
-    -- if(peripherals.warpdriveforceFieldProjector) then
-    --     for k,v in pairs(peripherals.warpdriveforceFieldProjector) do
-    --         filteredPeripherals.forceFieldController = v
-    --     end
-    -- else
-        filteredPeripherals.forceFieldController = false
-    -- end
+    filteredPeripherals.forceFieldProjector = {}
+    if(peripherals.warpdriveForceFieldProjector) then
+        for k,v in pairs(peripherals.warpdriveForceFieldProjector) do
+            filteredPeripherals.forceFieldProjector[k] = v
+            -- error(k)
+        end
+    else
+        filteredPeripherals.forceFieldProjector = false
+    end
 
     ---------- Cloaking Core peripheral
     if(peripherals.warpdriveCloakingCore) then
         for k,v in pairs(peripherals.warpdriveCloakingCore) do
-            filteredPeripherals.cloakingController = v
+            filteredPeripherals.cloakingCore = v
         end
     else
-        filteredPeripherals.cloakingController = false
+        filteredPeripherals.cloakingCore = false
     end
     ---------- Updates display once
     updateDisplay()
@@ -134,8 +145,8 @@ function updateDisplay()
 
 
     local shipController = filteredPeripherals.shipController
-    local cloakingController = filteredPeripherals.cloakingController
-    local forceFieldController = filteredPeripherals.forceFieldController
+    local cloakingCore = filteredPeripherals.cloakingCore
+    local forceFieldProjector = filteredPeripherals.forceFieldProjector
 
     if shipController then
         if shipController.isAttached() then
@@ -356,6 +367,7 @@ function updateDisplay()
                 end
                 refreshDisplay()
             end)
+            jumpButton:off("trigger")
             jumpButton:on("trigger",function()
                 shipController.jump()
 
@@ -368,24 +380,70 @@ function updateDisplay()
 
         end
     end
-    if forceFieldController then
+    if forceFieldProjector then
+        local forceFieldList = application:query("#forceFieldList").result[1]
+        activateForceFieldButton = application:query("#activateForceFieldButton").result[1]
 
+        forceFieldList:clearNodes()
+
+        local mainPageRadioButton = RadioButton(1,1,"forceFieldSelector")
+        mainPageRadioButton.value = "all"
+        mainPageRadioButton.id = "mainPageRadioButton"
+        mainPageRadioButton:setClass("forceFieldRadioButton", true)
+        forceFieldList:addNode(mainPageRadioButton)
+        local mainPageLabel = Label("All Forcefields",4,1)
+        mainPageLabel.labelFor = "mainPageRadioButton"
+        forceFieldList:addNode(mainPageLabel)
+
+        local i=3
+        for k,v in pairs(forceFieldProjector) do
+            local radioButton = RadioButton(1,i,"forceFieldSelector")
+            radioButton.value = k
+            radioButton.id = k
+            radioButton:setClass("forceFieldRadioButton", true)
+            forceFieldList:addNode(radioButton)
+            local label = Label(k,3,i)
+            label.labelFor = k
+            forceFieldList:addNode(label)
+
+            i = i+2
+        end
+        application:query(".forceFieldRadioButton"):off("select")
+        application:query(".forceFieldRadioButton"):on("select",function(radioButton)
+            selectedForceField = radioButton.value
+            if(not (selectedForceField=="all")) then
+                currentForceField = forceFieldProjector[selectedForceField]
+
+                activateForceFieldButton:off("trigger")
+                activateForceFieldButton:on("trigger",function()
+                    currentForceField.enable(not currentForceField.enable())
+                    refreshDisplay()
+                end)
+            end
+            refreshDisplay()
+        end)
+
+        mainPageRadioButton:select()
+        selectedForceField = "all"
     end
-    if cloakingController then
+    if cloakingCore then
         local activateCloakingButton = application:query("#activateCloakingButton").result[1]
 
         local tierRadioButton = application:query(".tierRadioButton")
-        local currentTier = cloakingController.tier()
+        local currentTier = cloakingCore.tier()
+
+        activateCloakingButton:setClass((cloakingCore.enable()) and "warningButton" or "affirmativeButton" ,true)
+        activateCloakingButton:setClass((not cloakingCore.enable()) and "warningButton" or "affirmativeButton" ,false)
 
         function toggleCloakingEnabled()
-            cloakingController.enable(not cloakingController.enable())
+            cloakingCore.enable(not cloakingCore.enable())
             refreshDisplay()
         end
         application:query("#tier"..currentTier.."Button").result[1]:select()
 
         tierRadioButton:off("select")
         tierRadioButton:on("select",function(radioButton)
-            cloakingController.tier(radioButton.value)
+            cloakingCore.tier(radioButton.value)
         end)
         activateCloakingButton:off("trigger")
         activateCloakingButton:on("trigger", toggleCloakingEnabled)
@@ -395,10 +453,11 @@ end
 ---------- Refreshes everything on the screen that needs to be updated regularily
 local prevShipControllerEnergy = 0
 local prevCloakingCoreEnergy = 0
+local prevForceFieldProjectorEnergy = 0
 function refreshDisplay()
     local shipController = filteredPeripherals.shipController
-    local cloakingController = filteredPeripherals.cloakingController
-    local forceFieldController = filteredPeripherals.forceFieldController
+    local cloakingCore = filteredPeripherals.cloakingCore
+    local forceFieldProjector = filteredPeripherals.forceFieldProjector
     if shipController then
         if shipController.isAttached() then
 
@@ -496,19 +555,40 @@ function refreshDisplay()
             downDimInput:queueAreaReset()
         end
     end
-    if forceFieldController then
+    if forceFieldProjector then
+        local activateForceFieldButton = application:query("#activateForceFieldButton").result[1]
+        local forceFieldProjectorEnergyProgressBar = application:query("#forceFieldProjectorEnergyProgressBar").result[1]
+        if(selectedForceField == "all") then
+            activateForceFieldButton:setEnabled(false)
+            activateForceFieldButton:setText("Activate")
+        else
+            local currentForceField = forceFieldProjector[selectedForceField]
+            activateForceFieldButton:setEnabled(true)
+            local isEnabled = currentForceField.enable()
+            local curEnergy, maxEnergy = currentForceField.energy()
 
+            activateForceFieldButton:setText(isEnabled and "Disable " or "Activate ")
+            activateForceFieldButton:setClass((currentForceField.enable()) and "warningButton" or "affirmativeButton" ,true)
+            activateForceFieldButton:setClass((not currentForceField.enable()) and "warningButton" or "affirmativeButton" ,false)
+
+            forceFieldProjectorEnergyProgressBar:set("maxValue",maxEnergy)
+            forceFieldProjectorEnergyProgressBar:set("value",curEnergy)
+            forceFieldProjectorEnergyProgressBar:setText(math.ceil((curEnergy/maxEnergy*100)).."%".." : ".. (((curEnergy-prevForceFieldProjectorEnergy)>=0) and "+" or "") ..(curEnergy-prevForceFieldProjectorEnergy) .."EU")
+
+            prevForceFieldProjectorEnergy = curEnergy
+        end
     end
-    if cloakingController then
+    if cloakingCore then
         local isAssemblyValidLabel = application:query("#isAssemblyValidLabel").result[1]
         local activateCloakingButton = application:query("#activateCloakingButton").result[1]
         local cloakingCoreEnergyProgressBar = application:query("#cloakingCoreEnergyProgressBar").result[1]
 
-        local isEnabled = cloakingController.enable()
-        local curEnergy,maxEnergy = cloakingController.energy()
+        local isEnabled = cloakingCore.enable()
+        local curEnergy,maxEnergy = cloakingCore.energy()
 
-
-        activateCloakingButton:setText("\n ".. (isEnabled and "Disable " or "Activate "))
+        activateCloakingButton:setText(isEnabled and "Disable " or "Activate ")
+        activateCloakingButton:setClass((cloakingCore.enable()) and "warningButton" or "affirmativeButton" ,true)
+        activateCloakingButton:setClass((not cloakingCore.enable()) and "warningButton" or "affirmativeButton" ,false)
 
         cloakingCoreEnergyProgressBar:set("maxValue",maxEnergy)
         cloakingCoreEnergyProgressBar:set("value", curEnergy)
@@ -516,7 +596,7 @@ function refreshDisplay()
         cloakingCoreEnergyProgressBar:setText(math.ceil((curEnergy/maxEnergy*100)).."%".." : ".. (((curEnergy-prevCloakingCoreEnergy)>=0) and "+" or "") ..(curEnergy-prevCloakingCoreEnergy) .."EU")
         prevCloakingCoreEnergy = curEnergy
 
-        if(cloakingController.isAssemblyValid()) then
+        if(cloakingCore.isAssemblyValid()) then
             isAssemblyValidLabel:setVisible(false)
             activateCloakingButton:setEnabled(true)
         else

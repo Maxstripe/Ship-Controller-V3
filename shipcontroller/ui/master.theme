@@ -12,6 +12,10 @@
     <backgroundColour>yellow</backgroundColour>
     <activeBackgroundColour>yellow</activeBackgroundColour>
 </Button>
+<Button class="affirmativeButton">
+    <backgroundColour>lime</backgroundColour>
+    <activeBackgroundColour>lime</activeBackgroundColour>
+</Button>
 
 
 <PageContainer>
