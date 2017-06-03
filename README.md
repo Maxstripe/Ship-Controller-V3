@@ -33,7 +33,7 @@ Download _shipControllerBuild_ directly or use pastebin: __pastebin get [bpJfJMs
   * Rename forcefield projector and save names on computer storage
   * Master switch to turn all forcefields on or off
   * Show sum of all information on main screen (Energy)
-  * Possibly implement remote control???
+  * Possibly implement remote control
 
 
 !["Ship Controller V3"](http://i.imgur.com/Q39GAEu.png "Ship Controller V3")
